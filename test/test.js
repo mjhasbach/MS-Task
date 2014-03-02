@@ -1,9 +1,9 @@
 // Before running this test, be sure to:
 // cd test/
 // npm install
-// This will download the async library, which is required for the test, but not MS-Task itself
+// This will download the async module, which is required for the test, but not MS-Task itself
 
-var tasklist = require('../tasklist'),
+var tasklist = require('../lib/ms-task'),
     async = require('async');
 
 async.parallel([
