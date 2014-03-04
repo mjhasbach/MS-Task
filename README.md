@@ -1,11 +1,11 @@
-> # MS-Task # 
+> # MS-Task
 > 
  
-## Description ## 
+## Description
  
 MS-Task is a Node.js wrapper for Microsoft Windows' [tasklist](https://www.microsoft.com/resources/documentation/windows/xp/all/proddocs/en-us/tasklist.mspx?mfr=true) and [taskkill](http://www.microsoft.com/resources/documentation/windows/xp/all/proddocs/en-us/taskkill.mspx?mfr=true). Tasklist "displays a list of applications and services with their Process ID (PID) for all tasks running on either a local or a remote computer." Taskkill "ends one or more tasks or processes." Supported versions: Windows XP, Vista, 7, and 8. 
  
-## Installation ## 
+## Installation
  
 You may install MS-Task via Node Package Manager as follows: 
  
@@ -13,7 +13,7 @@ You may install MS-Task via Node Package Manager as follows:
  
 The source code is available on [GitHub](https://github.com/mjhasbach/MS-Task). 
  
-## Commands ## 
+## Commands
  
 Process names passed to MS-Task are not case-sensitive, but must contain the file extension (e.g. "exe"). All task finding functions will fail if tasklist.exe is not located in C:\Windows\System32, and ```task.kill``` will fail if taskkill.exe is not located in C:\Windows\System32. 
  
@@ -33,7 +33,7 @@ Search for the process name that corresponds with the supplied ```PID```. ```Err
     task.kill(proc, callback(err){}); 
 Kill a given process name or PID (```proc```). ```Err``` is null if a process name or PID was killed successfully. If a process name is passed for ```proc```, and multiple matches are found, all of the matches are killed. 
  
-## Examples ## 
+## Examples
  
 See [test/test.js](https://github.com/mjhasbach/MS-Task/blob/master/test/test.js). Before running the test, be sure to: 
  
@@ -42,6 +42,6 @@ See [test/test.js](https://github.com/mjhasbach/MS-Task/blob/master/test/test.js
  
 This will download the async module, which is required for the test, but not MS-Task itself. 
  
-## Improving MS-Task ## 
+## Improving MS-Task
  
 If you would like to contribute code, feel free to submit a [pull request](https://github.com/mjhasbach/MS-Task/pulls). Please report issues [here](https://github.com/mjhasbach/MS-Task/issues).
