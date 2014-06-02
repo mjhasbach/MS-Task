@@ -1,8 +1,23 @@
 {
     "name": "ms-task",
-    "description": "A Node.js wrapper for Microsoft Windows' tasklist and taskkill.",
-    "version": "1.0.7",
+    "description": "A Node .js wrapper for Microsoft Windows' tasklist and taskkill",
+    "version": "1.0.8",
     "homepage": "https://github.com/mjhasbach/MS-Task",
+    "main": "lib/ms-task.js",
+    "private": false,
+
+    "dependencies": {
+        "csv": ">=0.4.0"
+    },
+
+    "devDependencies": {
+        "mocha": ">=1.20.0"
+    },
+
+    "scripts": {
+        "test": "node_modules/.bin/mocha"
+    },
+
     "keywords": [
         "Microsoft",
         "Windows",
@@ -16,26 +31,25 @@
         "kill",
         "utility"
     ],
+
     "repository": {
         "type": "git",
         "url": "https://github.com/mjhasbach/MS-Task.git"
     },
+
     "author": {
         "name": "Matthew Hasbach",
         "email": "hasbach.git@gmail.com",
         "url": "https://github.com/mjhasbach"
     },
+
     "licenses": [
         {
             "type": "MIT",
             "url": "https://github.com/mjhasbach/MS-Task/blob/master/LICENSE.txt"
         }
     ],
-    "main": "lib/ms-task.js",
-    "dependencies": {
-        "csv": "0.3.7"
-    },
-    "private": false,
+
     "bugs": {
         "url": "https://github.com/mjhasbach/MS-Task/issues"
     }

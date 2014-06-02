@@ -1,115 +1,91 @@
-// Before running this test, be sure to:
-//
-// cd test/
-// npm install
-//
-// This will download the async module, which is required for the test, but not MS-Task itself
+var assert = require( 'assert' ),
+    task = require( '../lib/ms-task' );
 
-var task = require('../lib/ms-task'),
-    async = require('async');
+describe( 'MS-Task', function() {
+    it( 'should be able to find Explorer using task()', function ( done ){
+        task( '/fi "IMAGENAME eq explorer.exe" /fo CSV', function( err, data ){
+            assert.equal( err, null );
 
-async.parallel([
-    function(callback){
-        task('/fi "IMAGENAME eq explorer.exe" /fo CSV', function(err, data) {
-            if(err) throw err;
-            console.log('task test');
-            console.log(data);
+            assert.equal( data.indexOf( 'explorer.exe' ) != -1, true );
 
-            callback(null, null);
+            done()
         });
-    },
-    function(callback){
-        task.list('/fi "IMAGENAME eq explorer.exe" /fo CSV', function(err, data) {
-            if(err) throw err;
-            console.log('task.list test');
-            console.log(data);
+    });
 
-            callback(null, null);
+    it( 'should be able to find Explorer using task.list()', function ( done ){
+        task.list( '/fi "IMAGENAME eq explorer.exe" /fo CSV', function( err, data ){
+            assert.equal( err, null );
+
+            assert.equal( data.indexOf( 'explorer.exe' ) != -1, true );
+
+            done()
         });
-    },
-    function(callback){
-        task.procStat('explorer.exe', function(err, data, amount) {
-            if(err) throw err;
-            console.log('task.procStat test');
+    });
 
-            if(amount > 0) {
-                console.log('One or more matching processes were found, here they are:');
+    it( 'should be able to find Explorer using task.procStat()', function ( done ){
+        task.procStat( 'explorer.exe', function( err, data, amount ){
+            assert.equal( err, null );
 
-                for (var x = 0; x < amount; x++) {
-                    console.log('(From data.array)');
-                    console.log('Process Name - ' + data.array[x][0]);
-                    console.log('Process Number - ' + data.array[x][1]);
-                    console.log('Session Name - ' + data.array[x][2]);
-                    console.log('Session Number - ' + data.array[x][3]);
-                    console.log('Memory Usage - ' + data.array[x][4]);
-                }
+            assert.equal( amount > 0, true );
 
-                for (var y = 0; y < amount; y++) {
-                    console.log('(From data.object)');
-                    console.log('Process Name - ' + data.object[y].name);
-                    console.log('Process Number - ' + data.object[y].pid);
-                    console.log('Session Name - ' + data.object[y].sessionName);
-                    console.log('Session Number - ' + data.object[y].sessionNumber);
-                    console.log('Memory Usage - ' + data.object[y].memUsage);
-                }
-            } else {
-                console.log("If Explorer isn't running on your PC, I can't help you :)")
-            }
+            assert.equal( data.array.length > 0, true );
+            assert.equal( data.object.length > 0, true );
 
-            console.log('');
+            data.array.forEach( function( proc ){
+                assert.equal( proc[ 0 ].indexOf( 'explorer.exe' ) != -1, true );
+                assert.equal( isNumber( proc[ 1 ]), true );
+                assert.equal( isString( proc[ 2 ]), true );
+                assert.equal( isNumber( proc[ 3 ]) > 0, true );
+            });
 
-            callback(null, null);
+            data.object.forEach( function( proc ){
+                assert.equal( proc.name.indexOf( 'explorer.exe' ) != -1, true );
+                assert.equal( isNumber( proc.pid ), true );
+                assert.equal( isString( proc.sessionName ), true );
+                assert.equal( isNumber( proc.sessionNumber) > 0, true );
+            });
+
+            done()
         });
-    },
-    function(callback){
-        task.pidOf('explorer.exe', function(err, data, amount) {
-            if(err) throw err;
-            console.log('task.pidOf test');
+    });
 
-            if(amount > 0) {
-                console.log('One or more matching process numbers were found, here they are:');
+    it( 'should be able to find Explorer using task.pidOf()', function ( done ){
+        task.pidOf( 'explorer.exe', function( err, pids, amount ){
+            assert.equal( amount > 0, true );
 
-                for (var i = 0; i < amount; i++) {
-                    console.log(data[i]);
-                }
+            assert.equal( pids.length > 0, true );
 
-                console.log('');
-            } else {
-                console.log("If Explorer isn't running on your PC, I can't help you :)")
-            }
+            pids.forEach( function( pid ){
+                assert.equal( isNumber( pid ), true);
+            });
 
-            callback(null, null);
+            done()
         });
-    },
-    function(callback){
-        task.nameOf(0, function(err, data) {
-            console.log('task.nameOf test');
+    });
 
-            if(err) {
-                console.log("If System Idle Process isn't running on your PC, I can't help you :)")
-            }
-            else {
-                console.log('A matching process name was found, here it is: ' + data);
-            }
+    it( 'should be able to find System Idle Process using task.nameOf()', function ( done ){
+        task.nameOf( 0, function( err, name ){
+            assert.equal( name.indexOf( 'System Idle Process' ) != -1, true );
 
-            console.log('');
-            callback(null, null);
+            done()
         });
-    }
-],
+    });
 
-// Commit suicide when all of the above tasks have completed
-function(){
-    console.log('task.kill test (committing suicide)');
-    task.kill(process.pid);
-    // Exit code will be 1 if the suicide was successful
+    it( 'should be able to kill a child process using task.kill()', function ( done ){
+        var proc = require( 'child_process' ).spawn( 'cmd.exe' );
+
+        proc.on( 'close', function() {
+            done()
+        });
+
+        task.kill( proc.pid );
+    });
 });
 
+function isString( obj ){
+    return Object.prototype.toString.call( obj ) == '[object String]'
+}
 
-
-
-
-
-
-
-
+function isNumber( obj ){
+    return !isNaN( parseFloat( obj ))
+}
