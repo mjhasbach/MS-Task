@@ -23,10 +23,8 @@ describe( 'MS-Task', function() {
     });
 
     it( 'should be able to find Explorer using task.procStat()', function ( done ){
-        task.procStat( 'explorer.exe', function( err, data, amount ){
+        task.procStat( 'explorer.exe', function( err, data ){
             assert.equal( err, null );
-
-            assert.equal( amount > 0, true );
 
             assert.equal( data.array.length > 0, true );
             assert.equal( data.object.length > 0, true );
@@ -50,9 +48,7 @@ describe( 'MS-Task', function() {
     });
 
     it( 'should be able to find Explorer using task.pidOf()', function ( done ){
-        task.pidOf( 'explorer.exe', function( err, pids, amount ){
-            assert.equal( amount > 0, true );
-
+        task.pidOf( 'explorer.exe', function( err, pids ){
             assert.equal( pids.length > 0, true );
 
             pids.forEach( function( pid ){
