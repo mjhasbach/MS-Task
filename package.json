@@ -1,7 +1,7 @@
 {
     "name": "ms-task",
     "description": "A Node .js wrapper for Microsoft Windows' tasklist and taskkill",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "homepage": "https://github.com/mjhasbach/MS-Task",
     "main": "lib/ms-task.js",
     "private": false,
